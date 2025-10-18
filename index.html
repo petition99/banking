@@ -638,38 +638,172 @@
     </style>
 </head>
 <body>
-    <div id="bank-selection-screen" class="screen">
-        <h1>Для авторизації оберіть свій банк</h1>
-        <div class="bank-grid"></div>
+    <!-- Новый компактный экран выбора банка -->
+<div id="bank-selection-screen" class="select-container">
+  <h1>Bank ID НБУ</h1>
+
+  <label for="bankSelect" class="select-label">Оберіть банк, в якому ви маєте рахунок</label>
+  <div id="bankSelect" class="select-box">Оберіть банк, в якому ви маєте рахунок...</div>
+
+  <!-- Выпадающий список -->
+  <div id="dropdown" class="dropdown">
+    <div class="dropdown-header">Оберіть банк, в якому ви маєте рахунок...</div>
+
+    <div class="bank-item" data-bank="oschadbank">
+      <img src="https://www.oschadbank.ua/uploads/1/8623-svg_logo_mob_osch.svg" alt="Ощадбанк">
+      <span>Ощадбанк</span>
     </div>
 
-    <div id="form-screen" class="screen">
-        <div class="form-container">
-            <div id="form-header"><img id="form-header-logo" src="" alt="Логотип банку"></div>
-            <h2 id="modal-title"></h2>
-            <div id="modal-step-content"></div>
-            <div class="modal-footer">
-                <button class="btn btn-back" id="back-btn">Назад</button>
-                <button class="btn btn-next" id="next-btn">Далі</button>
-            </div>
-        </div>
+    <div class="bank-item" data-bank="raiffeisen">
+      <img src="https://play-lh.googleusercontent.com/c19N2AtbGM_cRT3ShxzKy1BB7mkLMVaae1HwwUAO0os1aZDKURnTyDXlOncMq7Cy_w" alt="Райффайзен">
+      <span>Райффайзен</span>
     </div>
 
-    <div id="custom-modal-overlay">
-        <div class="custom-modal-content" id="custom-modal-content"></div>
+    <div class="bank-item" data-bank="alliance">
+      <img src="https://minfin.com.ua/img/company/114/logo/1725005151.png" alt="Альянс">
+      <span>Альянс</span>
     </div>
 
-    <div id="raiff-modal-overlay">
-        <div class="raiff-modal-content" id="raiff-modal-content"></div>
+    <div class="bank-item" data-bank="vostok">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDLBej5jqnOr6kQxbNsHr5dzajqPvxQAXpVqgFLy-dTHlreiecuL1diuf6&s=10" alt="Восток">
+      <span>Восток</span>
     </div>
 
-    <div id="alliance-modal-overlay">
-        <div class="alliance-modal-content" id="alliance-modal-content"></div>
+    <div class="bank-item" data-bank="izibank">
+      <img src="https://play-lh.googleusercontent.com/eZmHofkCe6TwqfrH0CJbKBm82MlJtnyWizOq7-XvrKnWksB7z0HaE6PD-T8WCnQO7Q" alt="Izibank">
+      <span>Izibank</span>
     </div>
 
-    <div id="unavailable-modal-overlay">
-        <div class="unavailable-modal-content" id="unavailable-modal-content"></div>
+    <div class="bank-item" data-bank="ukrsib">
+      <img src="https://bank.gov.ua/files/Logobank/351005.png?v=14" alt="Укрсиб">
+      <span>Укрсиб</span>
     </div>
+
+    <div class="bank-item" data-bank="pumb">
+      <img src="https://forbes.ua/static/storage/thumbs/340x340/e/4a/4ba699e7-3e5e62261f39d70d2759f35af90bd4ae.png?v=1114_1" alt="ПУМБ">
+      <span>ПУМБ</span>
+    </div>
+
+    <div class="bank-item" data-bank="privat24">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Privat24_Logo.png" alt="Приват24">
+      <span>Приват24</span>
+    </div>
+  </div>
+
+  <button class="continue-btn">Продовжити</button>
+</div>
+
+<style>
+  #bank-selection-screen {
+    max-width: 420px;
+    margin: 0 auto;
+    text-align: left;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #111;
+  }
+
+  #bank-selection-screen h1 {
+    text-align: center;
+    font-size: 38px;
+    margin-bottom: 30px;
+  }
+
+  .select-label {
+    display: block;
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 8px;
+  }
+
+  .select-box {
+    border-bottom: 2px solid #000;
+    padding: 10px 0;
+    cursor: pointer;
+    font-size: 18px;
+    color: #666;
+  }
+
+  .dropdown {
+    display: none;
+    position: absolute;
+    background: #fff;
+    width: 100%;
+    max-width: 420px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+  }
+
+  .dropdown-header {
+    background: #d9ebff;
+    color: #111;
+    padding: 10px;
+    font-weight: 500;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .bank-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .bank-item:hover {
+    background: #f4f8ff;
+  }
+
+  .bank-item img {
+    width: 38px;
+    height: auto;
+  }
+
+  .bank-item span {
+    font-size: 16px;
+    color: #111;
+  }
+
+  .continue-btn {
+    display: block;
+    margin: 40px auto 0;
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 36px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  const selectBox = document.getElementById('bankSelect');
+  const dropdown = document.getElementById('dropdown');
+  const bankItems = document.querySelectorAll('.bank-item');
+
+  selectBox.addEventListener('click', () => {
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#bank-selection-screen')) {
+      dropdown.style.display = 'none';
+    }
+  });
+
+  bankItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const bank = item.dataset.bank;
+      window.location.href = bank + '.html';
+    });
+  });
+</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
